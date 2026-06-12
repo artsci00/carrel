@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Carrel — Notion Web Clipper",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Reliable, local-first web capture for researchers. Full-article clips to Notion that never truncate — set properties before you save, works offline.",
   "permissions": ["activeTab", "scripting", "storage", "notifications", "alarms"],
   "host_permissions": ["https://api.notion.com/*"],

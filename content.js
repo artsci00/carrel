@@ -107,6 +107,16 @@
     return r.length ? r : [];
   }
 
+  const MAX_RICH_TEXT_PER_BLOCK = 100;
+
+  function pushRichBlock(out, type, richArr) {
+    if (!richArr || !richArr.length) return;
+    for (let i = 0; i < richArr.length; i += MAX_RICH_TEXT_PER_BLOCK) {
+      const chunk = richArr.slice(i, i + MAX_RICH_TEXT_PER_BLOCK);
+      out.push({ type, [type]: { rich_text: chunk } });
+    }
+  }
+
   // ---- Block builders ----------------------------------------------------
   const para = (richText) => ({
     type: "paragraph",
@@ -125,12 +135,12 @@
         const level = Math.min(3, parseInt(tag[1], 10));
         const type = `heading_${level}`;
         const r = rich(el);
-        if (r.length) out.push({ type, [type]: { rich_text: r } });
+        if (r.length) pushRichBlock(out, type, r);
         break;
       }
       case "p": {
         const r = rich(el);
-        if (r.length) out.push(para(r));
+        if (r.length) pushRichBlock(out, "paragraph", r);
         // images embedded inside paragraphs
         el.querySelectorAll("img").forEach((img) => pushImage(img, out));
         break;
@@ -145,7 +155,7 @@
             .querySelectorAll(":scope > ul, :scope > ol")
             .forEach((n) => n.remove());
           const r = rich(liClone);
-          if (r.length) out.push({ type: itemType, [itemType]: { rich_text: r } });
+          if (r.length) pushRichBlock(out, itemType, r);
           // one level of nested list, flattened as further list items
           li.querySelectorAll(":scope > ul, :scope > ol").forEach((n) =>
             blocksFromElement(n, out)
@@ -155,7 +165,7 @@
       }
       case "blockquote": {
         const r = rich(el);
-        if (r.length) out.push({ type: "quote", quote: { rich_text: r } });
+        if (r.length) pushRichBlock(out, "quote", r);
         break;
       }
       case "pre": {
@@ -180,7 +190,7 @@
         const cap = el.querySelector("figcaption");
         if (cap) {
           const r = rich(cap);
-          if (r.length) out.push(para(r));
+          if (r.length) pushRichBlock(out, "paragraph", r);
         }
         break;
       }
@@ -198,7 +208,7 @@
           );
           const line = cells.join("  |  ");
           if (line.trim())
-            out.push(para(splitRuns(line, {}, null)));
+            pushRichBlock(out, "paragraph", splitRuns(line, {}, null));
         });
         break;
       default: {
@@ -208,12 +218,12 @@
             if (n.nodeType === Node.ELEMENT_NODE) blocksFromElement(n, out);
             else if (n.nodeType === Node.TEXT_NODE) {
               const t = (n.textContent || "").trim();
-              if (t) out.push(para(splitRuns(t, {}, null)));
+              if (t) pushRichBlock(out, "paragraph", splitRuns(t, {}, null));
             }
           });
         } else {
           const r = rich(el);
-          if (r.length) out.push(para(r));
+          if (r.length) pushRichBlock(out, "paragraph", r);
         }
       }
     }
@@ -235,7 +245,7 @@
       if (n.nodeType === Node.ELEMENT_NODE) blocksFromElement(n, out);
       else if (n.nodeType === Node.TEXT_NODE) {
         const t = (n.textContent || "").trim();
-        if (t) out.push(para(splitRuns(t, {}, null)));
+        if (t) pushRichBlock(out, "paragraph", splitRuns(t, {}, null));
       }
     });
     return out;
