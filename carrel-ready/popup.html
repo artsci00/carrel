@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="word">Carrel</span>
+      </div>
+      <button id="openSettings" class="ghost" title="Settings">Settings</button>
+    </header>
+
+    <!-- Connect state -->
+    <section id="connect" class="pane hidden">
+      <p class="lead">Connect a Notion workspace to start clipping.</p>
+      <p class="muted">
+        You'll create a private integration and share one database with it. Your
+        token stays on this device — Carrel never sends it anywhere but Notion.
+      </p>
+      <button id="goConnect" class="primary">Open setup</button>
+    </section>
+
+    <!-- Clip state -->
+    <section id="clip" class="pane hidden">
+      <label class="field">
+        <span class="label">Save to</span>
+        <select id="destination"></select>
+      </label>
+      <div id="destNote" class="status work hidden"></div>
+
+      <label class="field" id="dbField">
+        <span class="label" id="dbLabel">Destination</span>
+        <div class="row">
+          <select id="db"></select>
+          <button id="refreshDb" class="ghost icon" title="Refresh list">⟳</button>
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label">Title</span>
+        <input id="title" type="text" placeholder="Page title" />
+      </label>
+
+      <div class="field" id="tagField">
+        <span class="label" id="tagLabel">Tags</span>
+        <div class="chips" id="chips"></div>
+        <input id="tagInput" type="text" placeholder="Add a tag, press Enter" />
+        <div class="suggest" id="tagSuggest"></div>
+      </div>
+
+      <label class="field hidden" id="selectField">
+        <span class="label" id="selectLabel">Status</span>
+        <select id="selectValue"></select>
+      </label>
+
+      <label class="field">
+        <span class="label">Note <span class="muted">(optional)</span></span>
+        <textarea id="notes" rows="2" placeholder="Why you're saving this…"></textarea>
+      </label>
+
+      <label class="toggle hidden" id="selToggle">
+        <input type="checkbox" id="selectionOnly" />
+        <span>Clip selection only <em id="selLen"></em></span>
+      </label>
+
+      <button id="clipBtn" class="primary">Clip to Notion</button>
+
+      <div id="status" class="status hidden"></div>
+      <div id="queue" class="queue hidden"></div>
+    </section>
+
+    <div id="boot" class="pane center muted">Loading…</div>
+
+    <script src="destinations.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

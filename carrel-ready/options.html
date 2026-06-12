@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <header class="hd">
+        <span class="mark" aria-hidden="true"></span>
+        <h1>Carrel</h1>
+        <p class="tag">Reliable, local-first research capture.</p>
+      </header>
+
+      <section class="card">
+        <h2>1 · Connect Notion</h2>
+        <ol class="guide">
+          <li>
+            Open
+            <a href="https://www.notion.so/my-integrations" target="_blank"
+              >notion.so/my-integrations</a
+            >
+            and create a new <strong>internal integration</strong>. Copy its
+            secret (starts with <code>ntn_</code> or <code>secret_</code>).
+          </li>
+          <li>
+            In Notion, open the database you want to clip into → <strong>•••</strong>
+            menu → <strong>Connections</strong> → add your integration. (Do this
+            for every database you want as a destination.)
+          </li>
+          <li>Paste the secret below and test the connection.</li>
+        </ol>
+
+        <label class="field">
+          <span class="label">Integration secret</span>
+          <input id="token" type="password" placeholder="ntn_…" autocomplete="off" />
+        </label>
+        <div class="actions">
+          <button id="test" class="primary">Test &amp; save</button>
+          <span id="tokenStatus" class="inline-status"></span>
+        </div>
+        <p class="muted small">
+          Stored only in this browser's local storage. Carrel sends it to
+          api.notion.com and nowhere else.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>2 · Default destination</h2>
+        <label class="field">
+          <span class="label">Database</span>
+          <select id="defaultDb"><option value="">Connect first…</option></select>
+        </label>
+        <p class="muted small">
+          You can still switch destination per-clip from the popup.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>3 · Capture preferences</h2>
+        <label class="check">
+          <input type="checkbox" id="loadImages" checked />
+          <span
+            >Load lazy images before clipping
+            <em>(slightly slower, captures more images)</em></span
+          >
+        </label>
+        <label class="check">
+          <input type="checkbox" id="appendSource" checked />
+          <span>Add a source header (link, byline, date, word count)</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" id="selectionDefault" />
+          <span>Default to "selection only" when text is highlighted</span>
+        </label>
+        <div class="actions">
+          <button id="savePrefs" class="primary">Save preferences</button>
+          <span id="prefStatus" class="inline-status"></span>
+        </div>
+      </section>
+
+      <footer class="ft muted small">
+        Carrel v0.1 · working name — rename before launch · single-purpose by
+        design.
+      </footer>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>
